@@ -10,31 +10,25 @@
   var c = canvas.getContext('2d');
 
   layersSet.forEach(function (layer, i) {
-    colorsSet[layer] = (i % 2 == 0) ? '#ffffff' : '#000000';
+    selectsSet[layer] = document.getElementById(layer + '_color');
+    selectsSet[layer].addEventListener('change', function (e) {
+      colorsSet[layer] = e.target.value;
+      draw();
+    });
 
-    var l = layer;
+    colorsSet[layer] = selectsSet[layer].value;
+
     var img = new Image(w, h);
     img.onload = function () {
-      imagesSet[l] = img;
+      imagesSet[layer] = img;
 
       if (Object.keys(imagesSet).length == layersSet.length) {
-        bindUI();
         draw();
       }
     };
 
     img.src = canvas.getAttribute('data-' + layer + '-image');
   });
-
-  function bindUI () {
-    layersSet.forEach(function (layer, i) {
-      selectsSet[layer] = document.getElementById(layer + '_color');
-      selectsSet[layer].addEventListener('change', function (e) {
-        colorsSet[layer] = e.target.value;
-        draw();
-      });
-    });
-  }
 
   function draw () {
     c.clearRect(0, 0, w, h);
